@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Trabalho escolar de Física sobre energia eólica, aerogeradores e uma maquete experimental.">
+  <title>Energia Eólica | Física em Movimento</title>
+  <style>
+    :root {
+      --bg: #07131f; --panel: #102333; --panel2: #142d40;
+      --text: #f1f7fb; --muted: #b2c4d1; --cyan: #56d8e8;
+      --green: #9be7bd; --line: rgba(255,255,255,.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; color: var(--text); background: var(--bg); line-height: 1.65; }
+    a { color: inherit; }
+    .nav { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 14px max(5vw, 20px); background: rgba(7,19,31,.88); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .brand { font-weight: 850; letter-spacing: .04em; white-space: nowrap; }
+    .brand span { color: var(--cyan); }
+    .navlinks { display: flex; flex-wrap: wrap; gap: 18px; }
+    .navlinks a { font-size: .91rem; text-decoration: none; color: var(--muted); }
+    .navlinks a:hover { color: var(--cyan); }
+    .hero { min-height: 80vh; display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 36px; padding: 80px max(7vw, 24px); overflow: hidden; background: radial-gradient(ellipse at 85% 40%, #174b5c 0%, transparent 42%), linear-gradient(135deg, #07131f, #0b2331); }
+    .eyebrow { color: var(--green); font-weight: 800; text-transform: uppercase; letter-spacing: .16em; font-size: .78rem; }
+    h1 { font-size: clamp(2.7rem, 6vw, 5.6rem); line-height: .99; letter-spacing: -.055em; margin: 18px 0 24px; }
+    h1 span { color: var(--cyan); }
+    .hero p { color: var(--muted); max-width: 620px; font-size: 1.12rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn { display: inline-block; border-radius: 999px; padding: 12px 20px; text-decoration: none; font-weight: 800; border: 1px solid var(--line); }
+    .btn.primary { background: var(--cyan); color: #06202a; border-color: var(--cyan); }
+    .hero-art { min-height: 330px; position: relative; display: grid; place-items: center; }
+    .sun { position: absolute; width: 120px; height: 120px; border-radius: 50%; background: #a5e9df; opacity: .85; right: 13%; top: 5%; box-shadow: 0 0 70px rgba(86,216,232,.22); }
+    .turbine { position: relative; width: 220px; height: 320px; z-index: 1; }
+    .tower { position: absolute; bottom: 0; left: 105px; width: 12px; height: 230px; background: linear-gradient(90deg,#d5e7eb,#718d9b); clip-path: polygon(35% 0,65% 0,100% 100%,0 100%); }
+    .hub { position: absolute; left: 96px; top: 78px; width: 30px; height: 30px; border-radius: 50%; background: #eaf7fa; border: 5px solid #6f99a7; z-index: 2; }
+    .blade { position: absolute; left: 105px; top: 92px; width: 14px; height: 130px; background: linear-gradient(90deg,#d9f7f7,#7eb9c5); border-radius: 100% 100% 12% 12%; transform-origin: 50% 0%; clip-path: polygon(50% 0,100% 25%,75% 100%,25% 100%,0 25%); }
+    .blade.one { transform: rotate(0deg) translateY(-10px); }
+    .blade.two { transform: rotate(120deg) translateY(-10px); }
+    .blade.three { transform: rotate(240deg) translateY(-10px); }
+    .ground { position: absolute; height: 55px; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg,#123b3c,transparent); border-radius: 50% 50% 0 0; }
+    .wind { position: absolute; width: 100%; height: 2px; background: linear-gradient(90deg,transparent,var(--cyan),transparent); opacity: .55; animation: drift 3s linear infinite; }
+    .wind:nth-child(2) { top: 34%; animation-delay: .7s; width: 80%; }
+    .wind:nth-child(3) { top: 58%; animation-delay: 1.4s; width: 92%; }
+    @keyframes drift { from { transform: translateX(-35%); opacity: 0; } 30% { opacity: .65; } to { transform: translateX(35%); opacity: 0; } }
+    section { padding: 78px max(7vw, 24px); }
+    .section-head { max-width: 760px; margin-bottom: 34px; }
+    .section-head h2 { font-size: clamp(2rem,4vw,3.2rem); line-height: 1.1; margin: 8px 0 14px; letter-spacing: -.035em; }
+    .section-head p, .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { background: linear-gradient(145deg,var(--panel),#0c1c29); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+    .card .icon { font-size: 1.8rem; }
+    .card h3 { margin: 12px 0 8px; }
+    .card p { margin: 0; color: var(--muted); }
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; counter-reset: step; }
+    .step { padding: 22px; border-top: 2px solid var(--cyan); background: var(--panel); border-radius: 0 0 16px 16px; }
+    .step:before { counter-increment: step; content: "0" counter(step); color: var(--green); font-weight: 900; font-size: 1.4rem; }
+    .step h3 { margin: 10px 0 5px; }
+    .step p { color: var(--muted); font-size: .95rem; }
+    .physics { background: linear-gradient(135deg,#102b3b,#0a1925); }
+    .formula { font-family: Georgia, serif; font-size: clamp(1.5rem,4vw,2.4rem); color: var(--green); background: #06131e; border: 1px solid var(--line); border-radius: 14px; padding: 22px; text-align: center; margin: 20px 0; }
+    .model { display: grid; grid-template-columns: .85fr 1.15fr; gap: 28px; align-items: center; }
+    .model-visual { min-height: 280px; display: grid; place-items: center; border: 1px dashed rgba(86,216,232,.45); border-radius: 22px; background: radial-gradient(circle,#164254,#0a1b28 70%); text-align: center; padding: 20px; }
+    .model-visual .emoji { font-size: 5rem; }
+    .note { border-left: 3px solid var(--green); padding: 12px 16px; background: rgba(155,231,189,.07); color: var(--muted); border-radius: 0 12px 12px 0; }
+    .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .proscons .card h3 { color: var(--green); }
+    .proscons .card:last-child h3 { color: #ffd18a; }
+    .country { background: linear-gradient(110deg,#0d2935,#102333); }
+    .stat { font-size: 2.3rem; font-weight: 900; color: var(--cyan); letter-spacing: -.04em; }
+    .quiz { max-width: 760px; }
+    .quiz button { background: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; text-align: left; cursor: pointer; width: 100%; margin: 6px 0; font: inherit; }
+    .quiz button:hover { border-color: var(--cyan); }
+    #feedback { min-height: 30px; color: var(--green); font-weight: 700; }
+    footer { padding: 36px max(7vw,24px); border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    footer a { color: var(--cyan); }
+    .small { font-size: .88rem; color: var(--muted); }
+    @media (max-width: 850px) {
+      .hero, .model { grid-template-columns: 1fr; }
+      .hero { padding-top: 60px; }
+      .hero-art { min-height: 300px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .nav { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .grid, .steps, .proscons { grid-template-columns: 1fr; }
+      .navlinks { gap: 10px 14px; }
+      section { padding-top: 56px; padding-bottom: 56px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#inicio" style="text-decoration:none">FÍSICA <span>EM MOVIMENTO</span></a>
+    <div class="navlinks">
+      <a href="#conceito">Conceito</a><a href="#funcionamento">Funcionamento</a><a href="#fisica">A Física</a>
+      <a href="#maquete">Maquete</a><a href="#brasil">Brasil</a><a href="#fontes">Fontes</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="inicio">
+    <div>
+      <div class="eyebrow">Projeto escolar • Física</div>
+      <h1>O vento vira<br><span>energia.</span></h1>
+      <p>A energia eólica transforma o movimento do ar em eletricidade. Neste projeto, vamos entender como isso acontece, qual é a Física envolvida e como uma maquete ajuda a demonstrar o princípio de funcionamento de um aerogerador.</p>
+      <div class="actions">
+        <a class="btn primary" href="#funcionamento">Explorar o processo ↓</a>
+        <a class="btn" href="#maquete">Ver a maquete</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-label="Ilustração de uma turbina eólica">
+      <div class="sun"></div><div class="wind"></div><div class="wind"></div><div class="wind"></div>
+      <div class="turbine"><div class="tower"></div><div class="blade one"></div><div class="blade two"></div><div class="blade three"></div><div class="hub"></div></div>
+      <div class="ground"></div>
+    </div>
+  </header>
+
+  <section id="conceito">
+    <div class="section-head">
+      <div class="eyebrow">01 / Conceito</div>
+      <h2>O que é energia eólica?</h2>
+      <p>É a energia obtida a partir da movimentação do ar. O vento surge principalmente por diferenças de temperatura e pressão na atmosfera, relacionadas ao aquecimento desigual da superfície terrestre pelo Sol.</p>
+    </div>
+    <div class="grid">
+      <article class="card"><div class="icon">🌬️</div><h3>Fonte renovável</h3><p>O vento é continuamente produzido por processos naturais da atmosfera, embora sua intensidade varie conforme o local e o clima.</p></article>
+      <article class="card"><div class="icon">⚡</div><h3>Geração elétrica</h3><p>A turbina captura parte da energia do vento e um gerador converte energia mecânica de rotação em energia elétrica.</p></article>
+      <article class="card"><div class="icon">🌱</div><h3>Menores emissões</h3><p>Durante a operação, parques eólicos não queimam combustível para gerar eletricidade e emitem poucos gases de efeito estufa.</p></article>
+    </div>
+  </section>
+
+  <section id="funcionamento">
+    <div class="section-head">
+      <div class="eyebrow">02 / Etapas</div>
+      <h2>Como funciona um aerogerador?</h2>
+      <p>Não é o vento entrando numa tomada, infelizmente. Existe uma sequência de transformações físicas até a eletricidade chegar à rede.</p>
+    </div>
+    <div class="steps">
+      <article class="step"><h3>O vento sopra</h3><p>O ar em movimento possui energia cinética e transfere parte dela às pás.</p></article>
+      <article class="step"><h3>As pás giram</h3><p>O formato aerodinâmico das pás produz uma força que faz o rotor girar.</p></article>
+      <article class="step"><h3>O gerador atua</h3><p>A rotação aciona o gerador, diretamente ou por meio de uma caixa de transmissão.</p></article>
+      <article class="step"><h3>A energia é distribuída</h3><p>Equipamentos elétricos ajustam a energia para que ela possa ser enviada à rede.</p></article>
+    </div>
+  </section>
+
+  <section class="physics" id="fisica">
+    <div class="section-head">
+      <div class="eyebrow">03 / Física aplicada</div>
+      <h2>A ciência por trás do giro</h2>
+      <p>O experimento conecta mecânica e eletromagnetismo: primeiro o vento transfere energia ao rotor; depois, o gerador usa indução eletromagnética para produzir tensão elétrica.</p>
+    </div>
+    <div class="grid">
+      <article class="card"><div class="icon">🌀</div><h3>Energia cinética</h3><p>É a energia associada ao movimento. Quanto maior a velocidade do vento, maior a energia disponível para ser capturada.</p></article>
+      <article class="card"><div class="icon">⚙️</div><h3>Energia mecânica</h3><p>As pás transferem energia para o eixo, que gira. O movimento de rotação é a etapa mecânica do sistema.</p></article>
+      <article class="card"><div class="icon">🧲</div><h3>Indução eletromagnética</h3><p>Em um gerador, o movimento relativo entre campos magnéticos e bobinas pode induzir uma tensão elétrica, conforme o princípio de Faraday.</p></article>
+    </div>
+    <div class="formula">E<sub>c</sub> = ½ · m · v²</div>
+    <p class="muted">Na fórmula, <strong>m</strong> é a massa e <strong>v</strong> é a velocidade. Como a velocidade aparece ao quadrado, ela influencia muito a energia cinética. A potência disponível no vento também depende fortemente da velocidade, além da área varrida pelas pás e da densidade do ar.</p>
+    <div class="note" style="margin-top:22px"><strong>Importante:</strong> nenhum aerogerador consegue converter toda a energia do vento em eletricidade. Existem limites físicos e perdas mecânicas e elétricas.</div>
+  </section>
+
+  <section id="maquete">
+    <div class="section-head">
+      <div class="eyebrow">04 / Experimento</div>
+      <h2>Nossa maquete</h2>
+      <p>A maquete representa, em escala reduzida, o princípio de funcionamento de uma turbina eólica. Ela permite observar como o movimento das pás pode ser aproveitado para demonstrar a transformação de energia.</p>
+    </div>
+    <div class="model">
+      <div class="model-visual"><div><div class="emoji">🛠️🌬️</div><h3>Modelo experimental</h3><p class="small">Espaço reservado para uma foto da maquete</p></div></div>
+      <div>
+        <h3>O que observar</h3>
+        <p class="muted">Quando o vento atinge as pás, elas começam a girar. Se o modelo estiver conectado a um pequeno motor usado como gerador, o giro pode produzir tensão elétrica e, dependendo do circuito, acender um LED ou alimentar uma pequena carga.</p>
+        <ul class="muted">
+          <li><strong>Pás:</strong> recebem a força do vento.</li>
+          <li><strong>Eixo:</strong> transmite o movimento de rotação.</li>
+          <li><strong>Motor/gerador:</strong> pode converter rotação em energia elétrica, se esse componente estiver presente.</li>
+          <li><strong>Fios e LED:</strong> quando instalados, ajudam a demonstrar a passagem de corrente elétrica.</li>
+        </ul>
+        <div class="note">Adapte esta descrição aos componentes reais da sua maquete. Se ela tiver outra montagem, não invente peças só para deixar o texto mais bonito.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">05 / Análise</div>
+      <h2>Vantagens e desafios</h2>
+      <p>Uma fonte renovável também tem limitações. A Física não distribui soluções mágicas, infelizmente.</p>
+    </div>
+    <div class="proscons">
+      <article class="card"><h3>✓ Vantagens</h3><ul class="muted"><li>Fonte renovável.</li><li>Baixas emissões durante a geração.</li><li>Não exige queima contínua de combustível.</li><li>Pode gerar empregos e renda em regiões produtoras.</li></ul></article>
+      <article class="card"><h3>! Desafios</h3><ul class="muted"><li>A geração varia com a intensidade do vento.</li><li>Parques precisam de locais adequados e conexão à rede.</li><li>Podem causar impactos na paisagem, no ruído e na fauna.</li><li>Fabricação, transporte e descarte dos equipamentos também têm impactos.</li></ul></article>
+    </div>
+  </section>
+
+  <section class="country" id="brasil">
+    <div class="section-head">
+      <div class="eyebrow">06 / Brasil</div>
+      <h2>Por que a energia eólica importa aqui?</h2>
+      <p>O Brasil tem áreas com ventos favoráveis, especialmente no Nordeste, e a energia eólica se tornou uma parte importante da matriz elétrica nacional. A produção varia ao longo do dia e do ano, por isso ela trabalha em conjunto com outras fontes e com o sistema elétrico.</p>
+    </div>
+    <div class="grid">
+      <article class="card"><div class="icon">🗺️</div><h3>Regiões com potencial</h3><p>O Nordeste concentra grande parte dos parques eólicos brasileiros, graças às condições de vento de várias áreas da região.</p></article>
+      <article class="card"><div class="icon">🔌</div><h3>Matriz elétrica</h3><p>Combinar diferentes fontes ajuda a atender à demanda mesmo quando o vento está fraco ou a produção varia.</p></article>
+      <article class="card"><div class="icon">📈</div><h3>Tecnologia em expansão</h3><p>Turbinas, planejamento e transmissão são fatores importantes para aproveitar melhor o potencial eólico.</p></article>
+    </div>
+    <p class="small" style="margin-top:20px">Para inserir números atuais de capacidade instalada ou participação na geração, consulte os dados mais recentes da EPE e do ONS nas fontes abaixo.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">07 / Teste rápido</div>
+      <h2>Você entendeu?</h2>
+      <p>Uma pergunta curta para revisar a ideia central do trabalho.</p>
+    </div>
+    <div class="quiz card">
+      <h3>Qual é a função principal do gerador em um aerogerador?</h3>
+      <button onclick="answer(false)">A) Transformar eletricidade em vento.</button>
+      <button onclick="answer(true)">B) Converter energia mecânica de rotação em energia elétrica.</button>
+      <button onclick="answer(false)">C) Criar energia do nada, contrariando a Física.</button>
+      <p id="feedback" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="conclusao">
+    <div class="section-head">
+      <div class="eyebrow">08 / Conclusão</div>
+      <h2>Do vento à eletricidade</h2>
+      <p>A energia eólica mostra como conceitos da Física aparecem em tecnologias reais. O vento movimenta as pás, a rotação aciona um gerador e a indução eletromagnética permite produzir eletricidade. A maquete torna esse processo mais concreto e ajuda a relacionar teoria e prática, embora um modelo pequeno não reproduza todas as condições de um parque eólico real.</p>
+    </div>
+  </section>
+
+  <footer id="fontes">
+    <h2>Fontes para pesquisa</h2>
+    <p>Use estas instituições para conferir conceitos e buscar dados atualizados:</p>
+    <ul>
+      <li><a href="https://www.gov.br/mme/pt-br" target="_blank" rel="noopener noreferrer">Ministério de Minas e Energia (MME)</a></li>
+      <li><a href="https://www.epe.gov.br/" target="_blank" rel="noopener noreferrer">Empresa de Pesquisa Energética (EPE)</a></li>
+      <li><a href="https://www.ons.org.br/" target="_blank" rel="noopener noreferrer">Operador Nacional do Sistema Elétrico (ONS)</a></li>
+      <li><a href="https://www.energy.gov/eere/wind/how-do-wind-turbines-work" target="_blank" rel="noopener noreferrer">U.S. Department of Energy: How Do Wind Turbines Work?</a></li>
+      <li><a href="https://www.manualdomundo.com.br/" target="_blank" rel="noopener noreferrer">Manual do Mundo</a> (referência para o experimento caseiro)</li>
+    </ul>
+    <p class="small">Trabalho escolar de Física • Energia eólica • Edite esta página para acrescentar os nomes dos integrantes, turma, escola e fotos da maquete.</p>
+  </footer>
+  <script>
+    function answer(correct) {
+      const feedback = document.getElementById('feedback');
+      if (correct) {
+        feedback.textContent = 'Isso! O gerador converte energia mecânica em energia elétrica.';
+      } else {
+        feedback.textContent = 'Não foi dessa vez. O gerador converte a rotação em energia elétrica. Tente novamente!';
+      }
+    }
+  </script>
+</body>
+</html>
+'''
+path = Path("/mnt/data/site_energia_eolica.html")
+path.write_text(html, encoding="utf-8")
+print(f"Arquivo criado: {path} ({path.stat().st_size} bytes)")
